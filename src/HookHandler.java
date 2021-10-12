@@ -31,7 +31,8 @@ public class HookHandler implements HttpHandler {
 
 		HttpServer server = null;
 		try {
-			server = HttpServer.create(new InetSocketAddress(PORT), 10);
+			server = HttpServer.create();
+// 			server = HttpServer.create(new InetSocketAddress(PORT), 10);
 			server.setExecutor(Executors.newFixedThreadPool(10));
 			server.start();
 			server.createContext(CONTEXT, this);
@@ -44,19 +45,21 @@ public class HookHandler implements HttpHandler {
 		
 		String query = httpExch.getRequestURI().getQuery();
 		System.out.println("Query: " + query);
-//		if (query != null) {
-//			Map<String, String> params = queryToMap(query);
-//			challenge = params.get(HUB_CHALLENGE);
-//		}
-//
-//		InputStream inputStream = httpExch.getRequestBody();
-//		StringBuilder sb = new StringBuilder();
-//		int i;
-//		while ((i = inputStream.read()) != -1) {
-//			sb.append((char) i);
-//		}
-//		inputStream.close();
-//		String incomingJSONContent = sb.toString();
+		if (query != null) {
+			Map<String, String> params = queryToMap(query);
+			challenge = params.get(HUB_CHALLENGE);
+		}
+
+		InputStream inputStream = httpExch.getRequestBody();
+		StringBuilder sb = new StringBuilder();
+		int i;
+		while ((i = inputStream.read()) != -1) {
+			sb.append((char) i);
+		}
+		inputStream.close();
+		String incomingJSONContent = sb.toString();
+		
+		System.out.println("incomingJSONContent: " + incomingJSONContent);
 //		(new JsonParser()).parseJson(incomingJSONContent);
 //
 //		replyOK(httpExch); // SYNCHRONOUS REPLY TO FB
